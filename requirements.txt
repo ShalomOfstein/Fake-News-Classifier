@@ -5,6 +5,7 @@ matplotlib
 seaborn
 jupyter
 notebook
+nltk
 torch
 torchtext
 torchvision
