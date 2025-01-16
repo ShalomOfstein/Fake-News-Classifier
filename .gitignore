@@ -1,4 +1,4 @@
 GoogleNews-vectors-negative300.bin.gz
 venv
 .idea
-best_mlp_model.pth
+section 4/*.pth
