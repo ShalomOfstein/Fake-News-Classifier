@@ -4,7 +4,7 @@ import torch
 from torch import nn
 from torch.utils.data import Dataset, DataLoader
 from gensim.models import KeyedVectors
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, precision_score, recall_score, f1_score
 
 # Load the saved model and necessary components
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -70,7 +70,7 @@ class TextDataset(Dataset):
         return self.texts[idx], self.labels[idx]
 
 
-def load_and_test_model(test_file_path, model_path, word2vec_path):
+def load_and_test_model(test_file_path, train_file_path, model_path, word2vec_path):
     # Load Word2Vec embeddings
     print("Loading Word2Vec embeddings...")
     word2vec = KeyedVectors.load_word2vec_format(word2vec_path, binary=True)
@@ -81,13 +81,16 @@ def load_and_test_model(test_file_path, model_path, word2vec_path):
     vocab = {"<PAD>": 0, "<UNK>": 1}
     embedding_matrix = [np.zeros(embedding_dim), np.random.uniform(-0.01, 0.01, embedding_dim)]
 
-    # Build vocabulary from Word2Vec
-    for word in word2vec.index_to_key:
-        if word not in vocab:
-            vocab[word] = len(vocab)
-            embedding_matrix.append(word2vec[word])
+    # Build vocabulary from training data first
+    train_data = pd.read_csv(train_file_path)
+    for text in train_data['text']:
+        for word in text.split():
+            if word not in vocab and word in word2vec:
+                vocab[word] = len(vocab)
+                embedding_matrix.append(word2vec[word])
 
     embedding_matrix = np.array(embedding_matrix)
+    print(f"Vocabulary size: {len(vocab)}")
 
     # Load test data
     print("Loading test data...")
@@ -112,7 +115,10 @@ def load_and_test_model(test_file_path, model_path, word2vec_path):
     # Load the model
     print("Loading the saved model...")
     model = MLPModel(embedding_matrix).to(device)
-    model.load_state_dict(torch.load(model_path))
+
+    # Load the state dict with safe loading
+    state_dict = torch.load(model_path, weights_only=True)
+    model.load_state_dict(state_dict)
     model.eval()
 
     # Test the model
@@ -129,9 +135,6 @@ def load_and_test_model(test_file_path, model_path, word2vec_path):
             test_labels.extend(labels.cpu().numpy())
 
     # Calculate metrics
-    from sklearn.metrics import precision_score, recall_score, f1_score
-
-    # Overall accuracy
     accuracy = accuracy_score(test_labels, test_preds)
 
     # Metrics for True News (class 1)
@@ -179,8 +182,9 @@ def load_and_test_model(test_file_path, model_path, word2vec_path):
 
 if __name__ == "__main__":
     # Specify your paths
-    test_file_path = "../test.csv"
+    test_file_path = "test.csv"
+    train_file_path = "train.csv"  # Added train file path
     model_path = "best_mlp_model.pth"
     word2vec_path = "../GoogleNews-vectors-negative300.bin.gz"
 
-    accuracy, report = load_and_test_model(test_file_path, model_path, word2vec_path)
+    metrics = load_and_test_model(test_file_path, train_file_path, model_path, word2vec_path)
