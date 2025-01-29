@@ -18,8 +18,8 @@ The best performing model (Advanced LSTM) achieved:
 
 ## Documentation
 
-- [Technical Report](docs/fake_news_classifier.pdf) - Detailed description of the models, methodology, and results
-- [Project Presentation](docs/presentation.pdf) - Visual overview of the project's key components and findings
+- [Technical Report](docs/Technical_Report.pdf) - Detailed description of the models, methodology, and results
+- [Project Presentation](docs/presentation.pptx) - Visual overview of the project's key components and findings
 
 ## Key Features
 
@@ -41,8 +41,8 @@ The advanced model includes:
 ## Dataset
 
 The project uses two datasets:
-1. "True and Fake News" dataset by Sameer Patel
-2. "WELFake" dataset by Saurabh Shahane
+1. "True and Fake News" dataset by Sameer Patel ([link](https://www.kaggle.com/code/therealsampat/fake-news-detection))
+2. "WELFake" dataset by Saurabh Shahane ([link](https://www.kaggle.com/datas%20ets/saurabhshahane/fake-news-classification))
 
 ## Dependencies
 
@@ -54,8 +54,17 @@ The project uses two datasets:
 - Matplotlib
 - Gensim (for Word2Vec)
 
+## Usage
+
+1. Clone the repository
+2. Install dependencies: `pip install -r requirements.txt`
+3. Download the pre-trained [Word2Vec embeddings](https://github.com/mmihaltz/word2vec-GoogleNews-vectors)
+4. Download the datasets - [Sameer Patel, Fake News Detection dataset](https://www.kaggle.com/code/therealsampat/fake-news-detection), [WELFake dataset](https://www.kaggle.com/datas%20ets/saurabhshahane/fake-news-classification)
+5. run the [data_preprocessing](./data_preprocessing.ipynb) notebook
+6. Run the training scripts for different models
+
 ## Authors
 
-- Yocheved Ofstein
-- Shay Gali
-- Shalom Ofstein
+- [Yocheved Ofstein](https://github.com/YochevedOfstein)
+- [Shay Gali](https://github.com/shaygali)
+- [Shalom Ofstein](https://github.com/ShalomOfstein)
