@@ -1,6 +1,6 @@
 # Fake News Classifier
 
-A machine learning project that classifies news articles as either "true" or "fake" using various models, from simple baselines to advanced neural networks.
+A machine learning and deep learning project that classifies news articles as either "true" or "fake" using various models, from simple baselines to advanced neural networks.
 
 ## Project Overview
 
